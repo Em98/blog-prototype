@@ -2,17 +2,23 @@ package com.yc.springinaction.model;
 
 import org.hibernate.annotations.CollectionId;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-public class User {
+public class User implements UserDetails, Serializable{
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue
     private long id;
@@ -20,7 +26,7 @@ public class User {
     @NotEmpty(message = "{username cannot be empty.}")
     @Size(min = 3, max = 20)
     @Column(nullable = false, unique = true, length = 20)
-    private String userName;
+    private String username;
 
     @NotEmpty(message = "password cannot be empty.")
     @Size(max = 100)
@@ -41,12 +47,47 @@ public class User {
     @Column(length = 200)
     private String avatar;
 
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+                inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")})
+    private List<Authority> authorities;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> simpleAuthorities = new ArrayList<>();
+        for(GrantedAuthority authority : this.authorities){
+            simpleAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
+        }
+        return simpleAuthorities;
+    }
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     protected User(){
 
     }
 
-    public User(String userName, String password, String name, String email, String avatar) {
-        this.userName = userName;
+    public User(String username, String password, String name, String email, String avatar) {
+        this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
@@ -61,12 +102,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -105,7 +146,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", userName='" + userName + '\'' +
+                ", userName='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
