@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="~{fragment/header :: header}">Title</title>
+</head>
+<body >
+<h1>Index</h1>
+<p th:text="${user.userName}">userName</p>
+<div th:replace="~{fragment/footer ::  footer}"></div>
+</body>
+</html>
