@@ -20,8 +20,8 @@ public class User implements UserDetails, Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotEmpty(message = "{username cannot be empty.}")
     @Size(min = 3, max = 20)
@@ -51,15 +51,6 @@ public class User implements UserDetails, Serializable{
     @JoinTable(name = "user_authority", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
                 inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")})
     private List<Authority> authorities;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> simpleAuthorities = new ArrayList<>();
-        for(GrantedAuthority authority : this.authorities){
-            simpleAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
-        }
-        return simpleAuthorities;
-    }
 
 
     @Override
@@ -94,11 +85,25 @@ public class User implements UserDetails, Serializable{
         this.avatar = avatar;
     }
 
-    public long getId() {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        //需要转为simpleGrantedAuthority， 前端才能解析
+        List<SimpleGrantedAuthority> simpleAuthorities = new ArrayList<>();
+        for(GrantedAuthority authority : this.authorities){
+            simpleAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
+        }
+        return simpleAuthorities;
+    }
+
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

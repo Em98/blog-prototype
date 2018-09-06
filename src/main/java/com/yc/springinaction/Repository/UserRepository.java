@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long>{
     Page<User> findByNameLike(String name, Pageable pageable);
-    User findByUserName(String username);
+    User findByUsername(String username);
 }

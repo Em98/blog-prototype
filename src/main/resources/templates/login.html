@@ -1,0 +1,43 @@
+
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Signin Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" type="text/css" charset="UTF-8">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/signin.css" rel="stylesheet" type="text/css" charset="UTF-8">
+
+    <script src="../static/js/bootstrap.min.js"></script>
+</head>
+
+<body class="text-center">
+<form class="form-signin" th:action="@{/login}" method="post">
+    <!--<img class="mb-4" src=".." alt="" width="72" height="72">-->
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <label >usernmae</label>
+    <input type="text" id="usernmae" class="form-control" name="username" placeholder="username" required autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" value="remember-me" name="remenber-me"> Remember me
+        </label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <div class=" col-md-5" th:if="${loginError}">
+        <p class="blog-label-error" th:text="${errorMsg}"></p>
+    </div>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+</form>
+</body>
+</html>

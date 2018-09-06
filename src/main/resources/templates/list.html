@@ -20,7 +20,7 @@
         <tbody>
         <tr th:each="user : ${users}">
             <th scope="row" th:text="${user.id}">id</th>
-            <td th:text="${user.userName}">name</td>
+            <td th:text="${user.username}">name</td>
             <td th:text="${user.email}">mail</td>
             <td><a th:href="@{/users/info/${user.id}}">edit</a></td>
             <td><a th:href="@{/users/delete/${user.id}}">delete</a></td>

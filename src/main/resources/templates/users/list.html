@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="~{fragment/header :: header}">Title</title>
+</head>
+<body >
+<h1>Index</h1>
+<h1>用户列表</h1>
+<table class="table">
+    <thead class="thead-light">
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">name</th>
+        <th scope="col">mail</th>
+        <th scope="col">role</th>
+        <th scope="col">edit</th>
+        <th scope="col">delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <th scope="row" th:text="${user.id}">id</th>
+        <td th:text="${user.username}">name</td>
+        <td th:text="${user.email}">mail</td>
+        <td th:text="${user.authorities[0]}">role</td>
+        <td><a th:href="@{/users/edit/(id=${user.id})}">edit</a></td>
+        <td><a th:href="@{/users/delete/{id}(id=${user.id})}">delete</a></td>
+    </tr>
+    </tbody>
+</table>
+<div class="form-group">
+    <div class="col-sm-2 control-label">
+        <a href="/toAdd" th:href="@{/users/toAdd}" class="btn btn-primary">add user</a>
+    </div>
+</div>
+
+</html>

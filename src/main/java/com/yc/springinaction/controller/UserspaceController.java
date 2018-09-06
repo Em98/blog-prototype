@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/u")
 public class UserspaceController {
-    @GetMapping("/{username")
+    @GetMapping("/{username}")
     public String userSpace(@PathVariable("username") String username){
         System.out.println("username: "+username);
         return "/userspace/u";

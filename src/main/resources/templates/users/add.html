@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="~{fragment/header :: header}">Title</title>
+</head>
+<body>
+<h1>添加用户</h1>
+<form th:action="@{/users/add}"  method="post">
+    <label>username</label>
+    <input type="text" name="username">
+    <label>password</label>
+    <input type="password" name="password">
+    <label>name</label>
+    <input type="text" name="name">
+    <label>email</label>
+    <input type="email", name="email">
+    <p><input type="checkbox" name="authorityId" value="1" checked="checked"/>admin</p>
+    <p><input type="checkbox" name="authorityId" value="2" />user</p>
+    <div th:if="${addError}">
+        <p th:text="${errorMsg}"></p>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+
+</form>
+
+<div th:replace="~{fragment/footer :: footer}"></div>
+</body>
+</html>
