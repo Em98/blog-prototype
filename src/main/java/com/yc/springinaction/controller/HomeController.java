@@ -12,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
@@ -80,5 +83,18 @@ public class HomeController {
     @GetMapping("/search")
     public String search(){
         return "search";
+    }
+
+    @GetMapping("/status")
+    public String status(){
+        return "status";
+    }
+
+
+    @PostMapping("/setStatus")
+    public ModelAndView toIndex(@RequestParam("input") String input, Model model){
+        System.out.println(input);
+        model.addAttribute("input", input);
+        return new ModelAndView("status", "status", model);
     }
 }

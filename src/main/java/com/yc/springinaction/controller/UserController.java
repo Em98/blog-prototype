@@ -28,35 +28,13 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/users")
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class UserController {
     @Autowired
     private UserService userService;
 
     @Autowired
     private AuthorityService authorityService;
-
-    @GetMapping(value = "/list")
-    public String listUsers(@RequestParam(value = "async", required = false) boolean async,
-                            @RequestParam(value = "pageIndex", defaultValue = "0") int pageIndex,
-                            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                            @RequestParam(value = "name", required = false, defaultValue = "") String name,
-                            Model model){
-
-        Pageable pageable = PageRequest.of(pageIndex, pageSize);
-        List<User> userList = userService.listUser();
-
-//        Page<User> page = userService.getUsersByNameLike(name, pageable);
-//        List<User> userList = page.getContent(); //the content od current page
-
-        System.out.println("-----------------");
-        System.out.println(userList.size());
-
-       // model.addAttribute("page", page);
-        model.addAttribute("users", userList);
-
-        return async==true?"/users/list :: #mainContainerReplace" : "/users/list";
-    }
 
     /**
      * 获取用户id后跳转至修改页面
@@ -109,6 +87,7 @@ public class UserController {
      */
     @PostMapping("/add")
     public String addNewUser(User user, Long authorityId, Model model){
+
         List<Authority> authorities = new ArrayList<>();
         authorities.add(authorityService.getAuthorityById(authorityId));
         user.setAuthorities(authorities);
@@ -127,7 +106,7 @@ public class UserController {
             model.addAttribute("addError", true);
             model.addAttribute("errorMsg", message);
         }
-        return "redirect:/users/list";
+        return "redirect:/admins/list";
     }
 
 //    @DeleteMapping("/{id}")
@@ -157,7 +136,9 @@ public class UserController {
             return "redirect:/users/list";
         }
 
-        return "redirect:/users/list";
+        return "redirect:/admins/list";
     }
+
+
 
 }

@@ -58,11 +58,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public Page<User> getUsersByNameLike(String name, Pageable pageable) {
+        name = "%"+name+"%";
         return userRepository.findByNameLike(name, pageable);
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         return userRepository.findByUsername(s);
+    }
+
+    @Override
+    public User getUserByUsername(String usernmae) {
+        return userRepository.findByUsername(usernmae);
     }
 }

@@ -1,19 +1,68 @@
 package com.yc.springinaction.controller;
 
+import com.yc.springinaction.model.User;
+import com.yc.springinaction.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/u")
 public class UserspaceController {
+    private static final String UPLOAD_PATH = "/Users/yc/code/springUpload";
+
+    @Autowired
+    private UserService userService;
+
+    /**跳转至个人信息主页，所有人能够查看
+     * 跳转至
+     * @param username
+     * @return
+     */
     @GetMapping("/{username}")
-    public String userSpace(@PathVariable("username") String username){
-        System.out.println("username: "+username);
-        return "/userspace/u";
+    public String userSpace(@PathVariable("username") String username, Model model){
+        User user = userService.getUserByUsername(username);
+        System.out.println(user.toString());
+        model.addAttribute("user", user);
+        return "/userspace/personalInfo";
     }
+
+    @GetMapping("/toUpload")
+    public String toUpload(){
+        return "/userspace/upload";
+    }
+
+
+    @PostMapping("/testAPI")
+    @ResponseBody
+    public String tstAPI(@RequestParam("api") String api){
+        String response = api + " upload";
+        return response;
+    }
+
+    @PostMapping("/upload")
+    public String uploadTest(@RequestParam("file") MultipartFile file, Model model){
+        if (file.isEmpty()){
+            model.addAttribute("message", "choose a file.");
+        }
+        else {
+            String messqge =  "getName():" + file.getName() + " getOdiginalFilename \n " + file.getOriginalFilename()
+            + " \n contentType: " + file.getContentType();
+            model.addAttribute("message", messqge);
+        }
+        return "/userspace/uploadStatus";
+    }
+
+//    @PostMapping("/up")
+//    public String test(@RequestParam("input") String input, RedirectAttributes redirectAttributes){
+//        String message = input + " upload fuck";
+//
+//        redirectAttributes.addAttribute("message", message);
+//        return "redirect:/userspace/uploadStatus";
+//    }
 
     @GetMapping("/{username}/blogs")
     public String listBlogsByOrder(@PathVariable("username") String username,
